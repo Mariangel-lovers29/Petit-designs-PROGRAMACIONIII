@@ -1,0 +1,120 @@
+<div class="page-container">
+  
+  <header class="main-header">
+    <div class="logo-wrapper">
+      <h1 class="logo-serif">Petit <span class="star-accent">★</span></h1>
+      <h2 class="logo-sans">DESIGNS</h2>
+      <p class="logo-slogan">Pequeñas Ideas, Gran Impacto</p>
+    </div>
+  </header>
+
+  <main class="app-content">
+
+    <!-- SECCIÓN ARQUITECTURA: MÁS BONITA Y ESTILIZADA -->
+    <section class="tech-info-box">
+      <details>
+        <summary>
+          <span class="icon-star">★</span> 
+          <strong>DETALLES TÉCNICOS DEL SISTEMA</strong> 
+          <span class="chevron">▼</span>
+        </summary>
+        
+        <div class="tech-content-wrapper">
+          <p class="intro-text">Sistema automatizado con ciclo <strong>CRUD completo</strong> y persistencia asíncrona mediante API REST.</p>
+          
+          <div class="tech-specs-grid">
+            <div class="spec-card">
+              <span class="spec-icon">💾</span>
+              <div class="spec-text"><strong>Base de Datos</strong><p>SQLite3 Engine</p></div>
+            </div>
+            <div class="spec-card">
+              <span class="spec-icon">📐</span>
+              <div class="spec-text"><strong>Modelo E-R</strong><p>Entidad Película</p></div>
+            </div>
+            <div class="spec-card">
+              <span class="spec-icon">⚡</span>
+              <div class="spec-text"><strong>Framework</strong><p>Angular 18</p></div>
+            </div>
+          </div>
+          <div class="tech-footer">Desarrollado con <strong>fines académicos</strong> para UNETI</div>
+        </div>
+      </details>
+    </section>
+
+    <!-- TARJETA PRINCIPAL -->
+    <section class="movie-card-main">
+      <header class="card-header">
+        <h3>PELÍCULAS FAVORITAS</h3>
+        <span class="badge">{{ peliculas.length }} películas en total</span>
+      </header>
+
+      <!-- FORMULARIO SIMÉTRICO -->
+      <div class="form-area">
+        <div class="grid-inputs">
+          <input type="text" [(ngModel)]="nuevaPeli.titulo" placeholder="Título de película...">
+          <input type="text" [(ngModel)]="nuevaPeli.director" placeholder="Director...">
+          <select [(ngModel)]="nuevaPeli.genero" title="Género">
+            <option value="" disabled selected>Seleccionar Género...</option>
+            <option *ngFor="let g of generos" [value]="g">{{g}}</option>
+          </select>
+          <div class="star-rating-input">
+            <span *ngFor="let i of [1,2,3,4,5]" (click)="setRating(i, 'nueva')" [class.active]="i <= nuevaPeli.calificacion">★</span>
+          </div>
+          <input type="text" [(ngModel)]="nuevaPeli.imagen" placeholder="URL del póster (Imagen)..." class="full-width">
+        </div>
+        <button (click)="agregarPelicula()" class="btn-add-full">Añadir</button>
+      </div>
+
+      <!-- VISTA 1: CARPETAS (3 POR FILA) -->
+      <div class="folder-grid" *ngIf="vistaActual === 'carpetas'">
+        <div *ngFor="let g of generos" class="folder-item" (click)="abrirGenero(g)">
+          <div class="folder-icon">📂</div>
+          <span class="folder-name">{{g}}</span>
+          <span class="folder-count">{{contarPeliculas(g)}}</span>
+        </div>
+      </div>
+
+      <!-- VISTA 2: LISTADO FILTRADO -->
+      <div class="list-container" *ngIf="vistaActual === 'listado'">
+        <div class="list-subheader">
+          <button (click)="volver()" class="btn-back">⬅ Volver</button>
+          <span class="current-gen">{{generoSeleccionado}}</span>
+        </div>
+
+        <!-- LISTADO DE PELÍCULAS -->
+        <article *ngFor="let p of peliculasFiltradas" class="movie-item">
+          <div class="view-row" *ngIf="idEditando !== p.id">
+            <div class="movie-info">
+              <img [src]="p.imagen || 'https://via.placeholder.com/45x65'" class="thumb" alt="Póster de {{ p.titulo || 'película' }}" title="Póster de {{ p.titulo || 'película' }}">
+              <div class="text-data">
+                <span class="peli-name">{{ p.titulo }}</span>
+                <div class="stars-display">
+                  <span *ngFor="let s of getStars(p.calificacion)">★</span>
+                </div>
+                <small class="peli-meta">{{ p.director }}</small>
+              </div>
+            </div>
+            <div class="actions">
+              <button (click)="iniciarEdicion(p)" class="btn-edit">✏️</button>
+              <button (click)="eliminarPelicula(p.id)" class="btn-delete">✕</button>
+            </div>
+          </div>
+        </article>
+
+        <!-- MENSAJE SI NO HAY PELÍCULAS EN ESE GÉNERO -->
+        <div class="empty-state" *ngIf="peliculasFiltradas.length === 0">
+           <div class="empty-icon">🎞️</div>
+           <p><strong>Hey, no has visto nada de este género.</strong></p>
+           <small>¡Anímate a añadir tu primera película!</small>
+        </div>
+
+      </div>
+    </section>
+  </main>
+
+  <footer class="uneti-footer">
+    <div class="footer-stars">✦ ✦ ✦ ✦</div>
+    <p><strong>Mariangel Ortiz Petit | C.I: 31.100.638</strong></p>
+    <p>© 2026 • Programación III | <span class="tag">UNETI</span></p>
+  </footer>
+</div>
